@@ -8,6 +8,7 @@ import CallRoom from './pages/CallRoom'
 function App() {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [supabaseError, setSupabaseError] = useState(null)
 
   useEffect(() => {
     if (!supabase) {
@@ -15,11 +16,24 @@ function App() {
       return
     }
 
-    const currentSession = supabase.auth.getSession()
-    currentSession.then(({ data }) => {
-      setSession(data.session)
-      setLoading(false)
-    })
+    supabase
+      .auth
+      .getSession()
+      .then(({ data, error }) => {
+        if (error) {
+          setSupabaseError(error.message || 'Supabase authentication failed.')
+          setLoading(false)
+          return
+        }
+
+        setSession(data?.session ?? null)
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.error('Supabase auth error:', error)
+        setSupabaseError(error.message || 'Unable to connect to Supabase.')
+        setLoading(false)
+      })
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_, authSession) => {
       setSession(authSession)
@@ -52,6 +66,20 @@ function App() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
         <p>Loading...</p>
+      </div>
+    )
+  }
+
+  if (supabaseError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4 text-white">
+        <div className="max-w-lg rounded-3xl border border-slate-800 bg-slate-900 p-8 text-center shadow-xl">
+          <h1 className="text-3xl font-semibold text-white">Supabase unavailable</h1>
+          <p className="mt-4 text-slate-400">
+            Une erreur de connexion à Supabase est survenue. Vérifiez votre configuration et essayez à nouveau.
+          </p>
+          <p className="mt-4 text-sm text-slate-300">{supabaseError}</p>
+        </div>
       </div>
     )
   }
