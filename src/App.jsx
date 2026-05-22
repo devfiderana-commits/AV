@@ -48,14 +48,9 @@ function App() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4 text-white">
         <div className="max-w-lg rounded-3xl border border-slate-800 bg-slate-900 p-8 text-center shadow-xl">
-          <h1 className="text-3xl font-semibold text-white">Configuration manquante</h1>
+          <h1 className="text-3xl font-semibold text-white">Erreur de connexion</h1>
           <p className="mt-4 text-slate-400">
-            Le projet n’a pas pu démarrer car les variables d’environnement Supabase sont absentes.
-          </p>
-          <p className="mt-4 rounded-2xl bg-slate-800 p-4 text-left text-sm text-slate-300">
-            Copiez <code className="rounded bg-slate-950 px-1 py-0.5">.env.example</code> en <code className="rounded bg-slate-950 px-1 py-0.5">.env</code>, puis ajoutez :
-            <br />
-            <span className="font-mono text-cyan-300">VITE_SUPABASE_URL</span> et <span className="font-mono text-cyan-300">VITE_SUPABASE_ANON_KEY</span>
+            Impossible de se connecter à la plateforme. Veuillez réessayer ultérieurement.
           </p>
         </div>
       </div>
